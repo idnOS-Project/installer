@@ -1,0 +1,13 @@
+[build]
+arch = "amd64"
+packages = []
+sources-list = [
+    "deb https://idnos.github.io/repo/idnos tangguh core",
+    "deb https://deb.debian.org/debian bullseye main contrib non-free",
+    "deb https://deb.debian.org/debian bullseye-updates main contrib non-free",
+    "deb https://deb.debian.org/debian bullseye-security main contrib non-free"
+]
+
+directory = "build/"
+
+# vim: set ts=4 sw=4 expandtab ai
