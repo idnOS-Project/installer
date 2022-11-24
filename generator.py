@@ -10,21 +10,31 @@ if shutil.which("mmdebstrap") is None:
     exit(1)
 
 import subprocess
-import tomllib
+import toml
 
 # load the config file
 config = None
-with open("config.toml", "rb") as f:
-    config = tomllib.load(f)
+with open("config.toml", "r") as f:
+    config = toml.load(f)
 
-output = subprocess.run(
+# generate the sources-list and write it to a file
+sources = "\n".join(config["build"]["sources-list"])
+with open("mmdebstrap-sources.list", "w") as f:
+    f.write(sources)
+    f.flush()
+
+mmdebstrap_process = subprocess.Popen(
     [
      "mmdebstrap",
-     "--architectures", config["mmdebstrap"]["arch"],
+     "--architectures", config["build"]["arch"],
      "--verbose",
-     "--include=", "m".join(config["mmdebstrap"]["packages"]),
-     config["mmdebstrap"]["outdir"],
+     "--include=" + ",".join(config["build"]["packages"]),
+     "",
+     config["build"]["outdir"],
     ],
-    input="\n".join(config["mmdebstrap"]["sources-list"]),
-    text=True
+    stdin=subprocess.PIPE,
+    shell=True
 )
+
+mmdebstrap_process.communicate(input=sources.encode())
+mmdebstrap_process.wait()
