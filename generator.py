@@ -26,15 +26,18 @@ with open("mmdebstrap-sources.list", "w") as f:
 mmdebstrap_process = subprocess.Popen(
     [
      "mmdebstrap",
-     "--architectures", config["build"]["arch"],
+     "--architectures=" + config["build"]["arch"],
      "--verbose",
+     "--format=tar",
      "--include=" + ",".join(config["build"]["packages"]),
-     "",
-     config["build"]["outdir"],
     ],
     stdin=subprocess.PIPE,
+    stdout=subprocess.PIPE,
     shell=True
 )
 
-mmdebstrap_process.communicate(input=sources.encode())
+tar_output = mmdebstrap_process.communicate(input=sources.encode())[0]
 mmdebstrap_process.wait()
+
+with open("output.tar", "wb") as f:
+    f.write(tar_output)
