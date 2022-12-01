@@ -1,0 +1,41 @@
+arch = "amd64"
+
+# Variant to be passed into `mmdebstrap`
+variant = "important"
+
+# Packages to be passed to `mmdebstrap`
+packages = ["btop"] # for testing
+
+# The sources list for apt to download packages from
+sources-list = [
+    "deb https://idnos.github.io/repo/idnos tangguh core",
+    "deb https://deb.debian.org/debian bullseye main contrib non-free",
+    "deb https://deb.debian.org/debian bullseye-updates main contrib non-free",
+    "deb https://security.debian.org bullseye-security main contrib non-free"
+]
+
+# Trusted keys to be passed to `mmdebstrap` and to be added to the target's `/etc/apt/trusted.gpg.d/`
+# These keys MUST be in GPG and in URL form. To pass in a file in the filesystem, use the file protocol: `file://`
+trusted-keys = [
+    "https://idnos.github.io/repo/public-key.gpg"
+]
+
+# A temporary directory of where the installer will use to place temporary files into
+# If the parent is "/tmp", the installer will create a new unique directory inside it
+tmpdir = "/tmp"
+
+# Remove the tmpdir after building by default
+tmpdir_del = true
+
+# The directory of where the build will be saved into
+outdir = "build/"
+
+# Customization hooks to run after bootstrapping the environment
+hooks = []
+
+# Default timezone and locale to use
+# unsetting these values will prompt the installer to ask for the timezone and locale
+timezone = "Asia/Jakarta" # will be passed to `timedatectl`
+locale = "id_ID.UTF-8 UTF-8" # will be passed to `/etc/locale.gen` of the target
+
+# vim: set ts=4 sw=4 expandtab ai:
